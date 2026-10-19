@@ -1,0 +1,266 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+- name: Setup Go environment
+  uses: actions/setup-go@v7.0.0
+  with:
+    # The Go version to download (if necessary) and use. Supports semver spec and ranges. Be sure to enclose this option in single quotation marks.
+    go-version: # optional
+    # Path to the go.mod, go.work, .go-version, or .tool-versions file.
+    go-version-file: # optional
+    # Set this option to true if you want the action to always check for the latest available version that satisfies the version spec
+    check-latest: # optional
+    # Used to pull Go distributions from go-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
+    token: # optional, default is ${{ github.server_url == 'https://github.com' && github.token || '' }}
+    # Used to specify whether caching is needed. Set to true, if you'd like to enable caching.
+    cache: # optional, default is true
+    # Used to specify the path to a dependency file (e.g., go.mod, go.sum)
+    cache-dependency-path: # optional
+    # Target architecture for Go to use. Examples: x86, x64. Will use system architecture by default.
+    architecture: # optional
+    # Custom base URL for downloading Go distributions. Use this to download Go from a mirror or custom source. Defaults to "https://go.dev/dl". Can also be set via the GO_DOWNLOAD_BASE_URL environment variable. The input takes precedence over the environment variable.
+    go-download-base-url: # optional- name: Docker promote
+  # You may pin to the exact commit or the version.
+  # uses: cloudposse/github-action-docker-promote@184274d6dd92a632a8e5c7b323d11c2041f9504f
+  uses: cloudposse/github-action-docker-promote@v0.5.0
+  with:
+    # Organization
+    organization: 
+    # Repository
+    repository: 
+    # Docker registry
+    registry: 
+    # Image name (excluding registry). Defaults to {{$organization/$repository}}.
+    image_name: # optional, default is 
+    # Source tag
+    from: # optional
+    # Target tags
+    to: # optional
+    # Extract target tags from Git reference and GitHub events
+    use_metadata: # optional, default is true
+    # Docker login
+    login: # optional, default is 
+    # Docker password
+    password: # optional, default is 
+    # Promote retry max attempts
+    promote-retry-max-attempts: # optional, default is 3
+    # Promote retry timeout seconds
+    promote-retry-timeout-seconds: # optional, default is 3000
+    # Promote retry wait seconds
+    promote-retry-wait-seconds: # optional, default is 30- name: DDN Deployment
+  # You may pin to the exact commit or the version.
+  # uses: hasura/ddn-deployment@2cfe285d8ca03c5248d4b5626edd10c9895d5f59
+  uses: hasura/ddn-deployment@2.0.0
+  with:
+    # Your PAT, preferably saved as a secret in your repository
+    hasura-pat: 
+    # A description to alert other users that this build was created using CI/CD
+    build_description: # optional, default is CI/CD via ddn-deployment GitHub Action- name: Virtual Kubernetes Cluster
+  # You may pin to the exact commit or the version.
+  # uses: UffizziCloud/cluster-action@a942aad6b44b81cfa23aa0865eca8cbdab0f31ee
+  uses: UffizziCloud/cluster-action@v1.0.1
+  with:
+    # URL to Uffizzi
+    server: # optional, default is https://app.uffizzi.com/
+    # Name of the Uffizzi cluster which is going to get created
+    cluster-name: 
+    # Path to kubeconfig file.
+    kubeconfig: # optional, default is ${{ github.workspace }}/kubeconfig
+    # Path to the k8s manifest file that needs to be applied
+    k8s-manifest-file: # optional, default is 
+    # Specify whether to create or delete a cluster
+    action: # optional, default is create- name: SQLite Cloud - docs search
+  # You may pin to the exact commit or the version.
+  # uses: sqlitecloud/docsearch-action@f3c6771bfa8f770cd0ca621587a4bd8fe92e8049
+  uses: sqlitecloud/docsearch-action@v6
+  with:
+    # The SQLite Cloud project connection string.
+    project-string: 
+    # Your website's documentation base url.
+    base-url: 
+    # The name of the database to use on SQLite Cloud, just remeber to create first a database on your project!
+    database: 
+    # The path of the markdown files, by default it will parse every .md/.mdx file recursively starting from the working directory.
+    path: # optional, default is $(pwd)
+    # If you want to remove html elements from the search set this to true.
+    strip-html: # optional
+    # If you want to remove jsx elements from the search set this to true.
+    strip-jsx: # optional
+    # If you want to avoid redundancy of your markdown titles in the search set this to true.
+    strip-md-titles: # optional
+    # If you use a front matter and you want the action to convert it to json and send it to the cloud make this true.
+    use-front-matter: # optional
+    # Use the slug in the header as the path instead of the relative one.
+    path-using-slug: # optional- name: Code Engine GitHub Action
+  # You may pin to the exact commit or the version.
+  # uses: IBM/code-engine-github-action@397f52bce0731f3c134a3d6ad0d2d8c0f1867a01
+  uses: IBM/code-engine-github-action@v1.3.1
+  with:
+    # IAM API Key used to log into the IBM Cloud
+    api-key: 
+    # An IBM Cloud Resource Group is a logical container used to organize and manage related cloud resources
+    resource-group: # optional
+    # The Region refers to a geographical area where the project is are located
+    region: 
+    # A Code Engine Project Is the grouping of your Apps, Functions and Jobs
+    project: 
+    # The type of component that should be deployed [App, Function, Job, Build]
+    component: 
+    # Name of the App, Function, Job or build
+    name: 
+    # Runtime used for the Function only required for function
+    runtime: # optional
+    # Name of the image that is used for this application
+    image: # optional
+    # Name of the registry secret used to authenticate against the Container registry
+    registry-secret: # optional
+    # Port of the Application
+    port: # optional
+    # Enable trusted profiles
+    trusted-profiles: # optional
+    # path to the directory containing the source code
+    build-source: # optional, default is .
+    # strategy used for building the image ['dockerfile', 'buildpacks']
+    build-strategy: # optional, default is buildpacks
+    # The size to use for the build, which determines the amount of resources used. Valid values include small, medium, large, xlarge, and xxlarge.
+    build-size: # optional, default is medium
+    # CPU configuration set for the component. If not set default Code Engine values are used.
+    cpu: # optional
+    # Memory configuration set for the component. If not set default Code Engine values are used.
+    memory: # optional- name: Deploy a Deploy Request
+  # You may pin to the exact commit or the version.
+  # uses: planetscale/deploy-deploy-request-action@ddb9d1c593391e6d1601d97e8aa44e3d4ea302f9
+  uses: planetscale/deploy-deploy-request-action@v4
+  with:
+    # The name of the database.
+    database_name: 
+    # The number of the deploy request to deploy. Defaults to the latest deploy request.
+    number: # optional
+    # The name of the organization that owns the database.
+    org_name: 
+    # If set to `true`, this action will wait for the deploy request to merge before exiting.
+    wait: # optional- name: Run python black code formatter
+  # You may pin to the exact commit or the version.
+  # uses: DataDog/action-py-black-formatter@bebd29d1572a82c8e4a9de3c42c1592529a7d6af
+  uses: DataDog/action-py-black-formatter@v2.5
+  with:
+    # Black additional input arguments.
+    additional_args: # optional, default is 
+    # Exit code when black formatting errors are found [true, false]. Defaults to 'true'.
+
+    fail_on_error: # optional, default is true
+    # Main branch of the repository to speed up incremental diff
+
+    main_branch: # optional, default is main
+    # (--quiet) Don't emit non-error messages to stderr. Errors are still emitted; silence 
+  those with 2>/dev/null
+
+    quiet_mode: # optional, default is false
+    # (--diff) Don't write the files back, just output a diff for each file on stdout.
+
+    print_diff_mode: # optional, default is false
+    # (--check) Don't write the files back, just return the status. Return code 0 means nothing 
+  would change. Return code 1 means some files would be reformatted. Return code 123 means
+  there was an internal error.
+
+    check_mode: # optional, default is false
+    # Turn on if you only want to check changed files instead of all files.
+
+    only_changed_files: # optional, default is false
+    # Sha of the commit to compare files to.
+
+    base_commit: # optional, default is - name: Datadog Static Analysis
+  # You may pin to the exact commit or the version.
+  # uses: DataDog/datadog-static-analyzer-github-action@8340f18875fcefca86844b5f947ce2431387e552
+  uses: DataDog/datadog-static-analyzer-github-action@v3.0.0
+  with:
+    # Your Datadog API key used to authenticate requests.
+    dd_api_key: # default is 
+    # Your Datadog Application key used to authenticate requests.
+    dd_app_key: # default is 
+    # The Datadog site. For example, users in the EU may want to set datadoghq.eu.
+    dd_site: # optional, default is datadoghq.com
+    # Set the number of CPUs used to by the analyzer.
+    cpu_count: # optional, default is 2
+    # Get the execution time statistics for analyzed files.
+    enable_performance_statistics: # optional, default is false
+    # Lets the analyzer print additional logs useful for debugging.
+    debug: # optional, default is no
+    # Enable Secrets (Limited Availability)
+    secrets_enabled: # optional, default is false
+    # Enable Static Analysis
+    static_analysis_enabled: # optional, default is true
+    # A subdirectory pattern or glob (or space-delimited subdirectory patterns) that the analysis should be limited to. For example: "src" or "src packages".
+    subdirectory: # optional, default is 
+    # The architecture of the image to use. Can be x86_64 or aarch64.
+    architecture: # optional, default is 
+    # Enable diff aware scanning mode.
+    diff_aware: # optional, default is true- name: Binary Size & Memory Footprint Tracking
+  # You may pin to the exact commit or the version.
+  # uses: membrowse/membrowse-action@34719bdb04722be5cbe9c1d6df4a1567ae98238d
+  uses: membrowse/membrowse-action@v1.2.15
+  with:
+    # Path to ELF file (not required when identical=true)
+    elf: # optional
+    # Space-separated list of linker script paths (optional - if omitted, uses default Code/Data regions)
+    ld: # optional
+    # Target name like esp32, stm32f4
+    target_name: 
+    # API key for MemBrowse
+    api_key: # optional
+    # MemBrowse API base URL (/upload appended automatically)
+    api_url: # optional, default is https://api.membrowse.com
+    # Continue even if budget alerts are detected (default: fail on alerts)
+    dont_fail_on_alerts: # optional, default is false
+    # Space-separated linker variable definitions (e.g., "__micropy_flash_size__=4096K RAM_START=0x20000000")
+    linker_vars: # optional, default is 
+    # Enable verbose output including full API responses (default: WARNING)
+    verbose: # optional, default is WARNING
+    # PR author name (auto-detected from GitHub event if not provided)
+    pr_author_name: # optional, default is 
+    # PR author email (auto-detected from GitHub event if not provided)
+    pr_author_email: # optional, default is 
+    # Mark this commit as having identical memory footprint to previous (metadata-only upload)
+    identical: # optional, default is false
+    # Path to linker map file for archive/object file attribution (supports GNU LD and IAR formats)
+    map_file: # optional, default is 
+    # Optional. Linker script supplying the real LENGTH per MEMORY region.
+Use this when the primary `ld` script is built with inflated region
+sizes so the link succeeds even when the binary exceeds the real
+target capacity (e.g. PX4 flash-analysis builds). Section attribution
+still uses `ld` (the wider ranges); utilization and overflow are then
+reported against the real LENGTH values from this script. Omit when
+the binary fits — the primary `ld` is already the real limit.
+
+    limits: # optional, default is 
+    # Space-separated list of ELF section names to exclude from the report
+(exact match), e.g. ".noinit .user_data". Skipped sections do not
+contribute to any region's used_size, and symbols inside them are
+removed from the report.
+
+    skip_sections: # optional, default is 
